@@ -85,9 +85,21 @@ public class FirebasePluginMessagingService extends FirebaseMessagingService {
             id = data.get("id");
             sound = data.get("sound");
             lights = data.get("lights"); //String containing hex ARGB color, miliseconds on, miliseconds off, example: '#FFFF00FF,1000,3000'
+            badge = data.get("badge");
 
             if (TextUtils.isEmpty(text)) {
                 text = data.get("body");
+            }
+
+            if (!TextUtils.isEmpty(badge)) {
+                Log.d(TAG, "ShortcutBadger.applyCount: " + badge);
+                int badgeCount = 0;
+                try {
+                    badgeCount = Integer.parseInt(badge);
+                } catch (NumberFormatException e){
+                    Log.d(TAG, "Invalied badge" + e.getMessage());
+                }
+                ShortcutBadger.applyCount(getApplicationContext(), badgeCount);
             }
         }
 
