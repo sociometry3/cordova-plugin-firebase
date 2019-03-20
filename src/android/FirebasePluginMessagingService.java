@@ -18,6 +18,8 @@ import android.graphics.Color;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 
+import me.leolin.shortcutbadger.ShortcutBadger;
+
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
@@ -73,6 +75,7 @@ public class FirebasePluginMessagingService extends FirebaseMessagingService {
         String id = "";
         String sound = "";
         String lights = "";
+        String badge = "";
         Map<String, String> data = remoteMessage.getData();
 
         if (remoteMessage.getNotification() != null) {
