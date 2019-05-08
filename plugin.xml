@@ -56,7 +56,7 @@ xmlns:android="http://schemas.android.com/apk/res/android">
 		<framework src="com.google.android.gms:play-services-tagmanager:16.0.8" />
 		<framework src="com.google.firebase:firebase-core:16.0.8" />
 		<framework src="com.google.firebase:firebase-messaging:17.6.0" />
-		<framework src="com.google.firebase:firebase-config:16.4.1 " />
+		<framework src="com.google.firebase:firebase-config:16.4.1" />
 		<framework src="com.google.firebase:firebase-perf:16.2.5" />
 	</platform>
 
