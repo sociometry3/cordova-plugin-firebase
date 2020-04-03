@@ -76,6 +76,7 @@ public class FirebasePluginMessagingService extends FirebaseMessagingService {
         String sound = "";
         String lights = "";
         String badge = "";
+        Boolean isTest = false;
         Map<String, String> data = remoteMessage.getData();
 
         if (remoteMessage.getNotification() != null) {
@@ -89,7 +90,7 @@ public class FirebasePluginMessagingService extends FirebaseMessagingService {
             sound = data.get("sound");
             lights = data.get("lights"); //String containing hex ARGB color, miliseconds on, miliseconds off, example: '#FFFF00FF,1000,3000'
             badge = data.get("badge");
-
+            isTest = data.get("isTest").equals("test");
             if (TextUtils.isEmpty(text)) {
                 text = data.get("body");
             }
@@ -122,11 +123,14 @@ public class FirebasePluginMessagingService extends FirebaseMessagingService {
         // TODO: Add option to developer to configure if show notification when app on foreground
         if (!TextUtils.isEmpty(text) || !TextUtils.isEmpty(title) || (data != null && !data.isEmpty())) {
             boolean showNotification = (FirebasePlugin.inBackground() || !FirebasePlugin.hasNotificationsCallback()) && (!TextUtils.isEmpty(text) || !TextUtils.isEmpty(title));
-            sendNotification(id, title, text, data, showNotification, sound, lights);
+            if(isTest) {
+                showNotification = true;
+            }
+            sendNotification(id, title, text, data, showNotification, sound, lights, isTest);
         }
     }
 
-    private void sendNotification(String id, String title, String messageBody, Map<String, String> data, boolean showNotification, String sound, String lights) {
+    private void sendNotification(String id, String title, String messageBody, Map<String, String> data, boolean showNotification, String sound, String lights, Boolean isTest) {
         Bundle bundle = new Bundle();
         for (String key : data.keySet()) {
             bundle.putString(key, data.get(key));
@@ -222,6 +226,9 @@ public class FirebasePluginMessagingService extends FirebaseMessagingService {
             }
 
             notificationManager.notify(id.hashCode(), notification);
+            if (isTest && !FirebasePlugin.inBackground()) {
+                FirebasePlugin.sendNotification(bundle, this.getApplicationContext());
+            }
         } else {
             bundle.putBoolean("tap", false);
             bundle.putString("title", title);
